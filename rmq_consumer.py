@@ -3,7 +3,7 @@ import pika
 
 
 class RmqConsumer():
-    def __init__(self, url, exchange, queue, routing_key='#', queue_type='topic', durable=True):
+    def __init__(self, url, exchange, queue, routing_key='#', queue_type='topic', durable=True, prefetch_count=1000):
         self.url = url
         self.exchange = exchange
         self.queue = queue
@@ -13,6 +13,7 @@ class RmqConsumer():
         self.auto_delete = False
         self.channel = None
         self.consumer_tag = None
+        self.prefetch_count = prefetch_count
 
         self._connection = None
         self._channel = None
@@ -55,6 +56,9 @@ class RmqConsumer():
     def on_channel_open(self, channel):
         self._channel = channel
         self.add_on_channel_close_callback()
+
+        self._channel.basic_qos(prefetch_count=self.prefetch_count)
+
         self.setup_exchange(self.exchange)
 
     def setup_exchange(self, exchange_name):

@@ -13,9 +13,10 @@ def str_to_dict(string):
 
 class RabbitMqToHttpProxy(RmqConsumer):
     def __init__(self, url, exchange, queue, routing_key='#', queue_type='topic', durable=True, endpoint=None,
-                 verbose=False):
+                 verbose=False, prefetch_count=1000):
         RmqConsumer.__init__(self, url=url, exchange=exchange, queue=queue,
-                             routing_key=routing_key, queue_type=queue_type, durable=durable)
+                             routing_key=routing_key, queue_type=queue_type, durable=durable,
+                             prefetch_count=prefetch_count)
 
         self.endpoint = endpoint
         self.verbose = verbose
@@ -47,6 +48,8 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--url', dest='url', type=str, required=True, help='Url of RabbitMQ server')
     parser.add_argument('-e', '--exchange', dest='exchange', type=str, required=True, help='Exchange to bind')
     parser.add_argument('-q', '--queue', dest='queue', type=str, required=True, help='Name of queue to consume')
+    parser.add_argument('-p', '--prefetch_count', dest='prefetch_count', type=int, required=False,
+                        default=1000, help='Number of prefetch count')
     parser.add_argument('-r', '--routing_key', dest='routing_key', type=str, required=True,
                         help='Routing key')
     parser.add_argument('-t', '--queue_type', dest='queue_type', type=str, required=False, help='Queue type',
@@ -65,5 +68,5 @@ if __name__ == '__main__':
 
     proxy = RabbitMqToHttpProxy(url=args.url, exchange=args.exchange, queue=args.queue,
                                 routing_key=args.routing_key, queue_type=args.queue_type,
-                                endpoint=args.endpoint, verbose=args.verbose)
+                                endpoint=args.endpoint, verbose=args.verbose, prefetch_count=args.prefetch_count)
     proxy.run()
