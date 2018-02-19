@@ -1,4 +1,4 @@
-# RabbitMQ to HTTP restful API proxy
+# RabbitMQ to restful API proxy
 
 Consumes messages from single RabbitMQ queue and posts message to restful API.
 
