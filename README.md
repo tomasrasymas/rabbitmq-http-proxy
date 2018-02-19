@@ -5,7 +5,8 @@ Consumes messages from single RabbitMQ queue and posts message to restful API.
 ### Usage
 ```
 usage: rabbitmq_to_http_proxy.py [-h] [-a ENDPOINT] -u URL -e EXCHANGE -q
-                                 QUEUE -r ROUTING_KEY [-t QUEUE_TYPE] [-v]
+                                 QUEUE [-p PREFETCH_COUNT] -r ROUTING_KEY
+                                 [-t QUEUE_TYPE] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -16,14 +17,15 @@ optional arguments:
                         Exchange to bind
   -q QUEUE, --queue QUEUE
                         Name of queue to consume
+  -p PREFETCH_COUNT, --prefetch_count PREFETCH_COUNT
+                        Number of prefetch count
   -r ROUTING_KEY, --routing_key ROUTING_KEY
                         Routing key
   -t QUEUE_TYPE, --queue_type QUEUE_TYPE
                         Queue type
-  -v, --verbose         Verbose
 ```
 
 Command example:
 ```
-python rabbitmq_to_http_proxy.py -u 'amqp://john:john1234@rabbit.john.com:5672/johnvhost?heartbeat=10' -e clients -q prices -r '*.prices' -v -a http://127.0.0.1:5000/api/prices
+python rabbitmq_to_http_proxy.py -u 'amqp://john:john1234@rabbit.john.com:5672/johnvhost?heartbeat=10' -e clients -q prices -r '*.prices' -v -a http://127.0.0.1:5000/api/prices -p 100
 ```
